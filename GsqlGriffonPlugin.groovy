@@ -18,18 +18,53 @@
  * @author Andres Almiray
  */
 class GsqlGriffonPlugin {
-    def version = '0.8'
-    def dependsOn = [datasource: 0.2]
-    def griffonVersion = '0.9.4 > *'
-    def license = 'Apache Software License 2.0'
+    // the plugin version
+    String version = '0.9'
+    // the version or versions of Griffon the plugin is designed for
+    String griffonVersion = '0.9.5 > *'
+    // the other plugins this plugin depends on
+    Map dependsOn = [datasource: '0.3']
+    // resources that are included in plugin packaging
+    List pluginIncludes = []
+    // the plugin license
+    String license = 'Apache Software License 2.0'
+    // Toolkit compatibility. No value means compatible with all
+    // Valid values are: swing, javafx, swt, pivot, gtk
+    List toolkits = []
+    // Platform compatibility. No value means compatible with all
+    // Valid values are:
+    // linux, linux64, windows, windows64, macosx, macosx64, solaris
+    List platforms = []
+    // URL where documentation can be found
+    String documentation = ''
+    // URL where source can be found
+    String source = 'https://github.com/griffon/griffon-gsql-plugin'
 
-    def author = 'Andres Almiray'
-    def authorEmail = 'aalmiray@users.sourceforge.net'
-    def title = 'Groovy SQL support'
-    def description = '''
-Groovy SQL support
+    List authors = [
+        [
+            name: 'Andres Almiray',
+            email: 'aalmiray@yahoo.com'
+        ]
+    ]
+    String title = 'Groovy SQL support'
+    String description = '''
+The GSQL plugin enables lightweight access multiple SQL datasources.
+This plugin does NOT provide domain classes nor dynamic finders like GORM does.
+
+Usage
+-----
+Upon installation the plugin will generate the following artifacts in `$appdir/griffon-app/conf`:
+
+ * BootstrapGsql.groovy - defines init/destroy hooks for data to be manipulated during app startup/shutdown.
+
+This plugin relies on the facilities exposed by the [datasource][1] plugin.
+
+### Example
+
+A trivial sample application can be found at [https://github.com/aalmiray/griffon_sample_apps/tree/master/persistence/gsql][2]
+
+
+[1]: /plugin/datasource 
+[2]: https://github.com/aalmiray/griffon_sample_apps/tree/master/persistence/gsql
 '''
-
-    // URL to the plugin's documentation
-    def documentation = 'http://griffon.codehaus.org/Gsql+Plugin'
 }
