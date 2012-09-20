@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2009-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@
  */
 class GsqlGriffonPlugin {
     // the plugin version
-    String version = '0.9'
+    String version = '1.0'
     // the version or versions of Griffon the plugin is designed for
-    String griffonVersion = '0.9.5 > *'
+    String griffonVersion = '1.1.0 > *'
     // the other plugins this plugin depends on
-    Map dependsOn = [datasource: '0.3']
+    Map dependsOn = [datasource: '0.4']
     // resources that are included in plugin packaging
     List pluginIncludes = []
     // the plugin license
@@ -58,6 +58,11 @@ Upon installation the plugin will generate the following artifacts in `$appdir/g
  * BootstrapGsql.groovy - defines init/destroy hooks for data to be manipulated during app startup/shutdown.
 
 This plugin relies on the facilities exposed by the [datasource][1] plugin.
+
+### Multiple Databases
+
+The plugin expects a class `BootstrapGsql_<datasourcename>` to be available in the classpath. The default `BootstrapGsql` class
+will be used if the former could not be found.
 
 ### Example
 
