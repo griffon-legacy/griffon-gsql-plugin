@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 the original author or authors.
+ * Copyright 2009-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,10 @@ import griffon.plugins.datasource.DataSourceConnector
  */
 @Singleton
 final class GsqlConnector {
+    private static final String DEFAULT = 'default'
     private bootstrap
 
-    void connect(GriffonApplication app, String dataSourceName = 'default') {
+    void connect(GriffonApplication app, String dataSourceName = DEFAULT) {
         DataSource dataSource = null
         if(!DataSourceHolder.instance.isDataSourceConnected(dataSourceName)) {
             ConfigObject config = DataSourceConnector.instance.createConfig(app)
@@ -40,16 +41,20 @@ final class GsqlConnector {
         app.event('GsqlConnectStart', [dataSourceName, dataSource])
         bootstrap = app.class.classLoader.loadClass('BootstrapGsql').newInstance()
         bootstrap.metaClass.app = app
-        DataSourceHolder.instance.withSql(dataSourceName) { dsName, sql -> bootstrap.init(dsName, sql) }
+        DataSourceConnector.instance.resolveDataSourceProvider(app).withSql(dataSourceName) { dsName, sql ->
+            bootstrap.init(dsName, sql)
+        }
         app.event('GsqlConnectEnd', [dataSourceName, dataSource])
     }
 
-    void disconnect(GriffonApplication app, String dataSourceName = 'default') {
+    void disconnect(GriffonApplication app, String dataSourceName = DEFAULT) {
         if(!DataSourceHolder.instance.isDataSourceConnected(dataSourceName)) return
-        
+
         DataSource dataSource = DataSourceHolder.instance.getDataSource(dataSourceName)
         app.event('GsqlDisconnectStart', [dataSourceName, dataSource])
-        DataSourceHolder.instance.withSql(dataSourceName) { dsName, sql -> bootstrap.destroy(dsName, sql) }
+        DataSourceConnector.instance.resolveDataSourceProvider(app).withSql(dataSourceName) { dsName, sql ->
+            bootstrap.destroy(dsName, sql)
+        }
         app.event('GsqlDisconnectEnd', [dataSourceName, dataSource])
         ConfigObject config = DataSourceConnector.instance.createConfig(app)
         DataSourceConnector.instance.disconnect(app, config, dataSourceName)
