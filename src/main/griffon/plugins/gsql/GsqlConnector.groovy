@@ -31,7 +31,7 @@ final class GsqlConnector {
 
     void connect(GriffonApplication app, String dataSourceName = DEFAULT) {
         DataSource dataSource = null
-        if(!DataSourceHolder.instance.isDataSourceConnected(dataSourceName)) {
+        if (!DataSourceHolder.instance.isDataSourceConnected(dataSourceName)) {
             ConfigObject config = DataSourceConnector.instance.createConfig(app)
             dataSource = DataSourceConnector.instance.connect(app, config, dataSourceName)
         } else {
@@ -48,7 +48,7 @@ final class GsqlConnector {
     }
 
     void disconnect(GriffonApplication app, String dataSourceName = DEFAULT) {
-        if(!DataSourceHolder.instance.isDataSourceConnected(dataSourceName)) return
+        if (!DataSourceHolder.instance.isDataSourceConnected(dataSourceName)) return
 
         DataSource dataSource = DataSourceHolder.instance.getDataSource(dataSourceName)
         app.event('GsqlDisconnectStart', [dataSourceName, dataSource])

@@ -17,15 +17,18 @@
 import griffon.core.GriffonApplication
 import griffon.plugins.gsql.GsqlConnector
 
+import static griffon.util.ConfigUtils.getConfigValueAsBoolean
+
 /**
  * @author Andres Almiray
  */
 class GsqlGriffonAddon {
-    void addonPostInit(GriffonApplication app) {
-        GsqlConnector.instance.connect(app)
-    }
-
     Map events = [
+        LoadAddonsEnd: { app, addons ->
+            if (getConfigValueAsBoolean(app.config, 'griffon.gsql.connect.onstartup', true)) {
+                GsqlConnector.instance.connect(app)
+            }
+        },
         ShutdownStart: { app ->
             GsqlConnector.instance.disconnect(app)
         }

@@ -23,7 +23,7 @@ includeTargets << griffonScript("_GriffonCreateArtifacts")
 argsMap = argsMap ?: [:]
 argsMap.skipPackagePrompt = true
 
-if(!new File("${basedir}/griffon-app/conf/BootstrapGsql.groovy").exists()) {
+if (!new File("${basedir}/griffon-app/conf/BootstrapGsql.groovy").exists()) {
    createArtifact(
       name: "BootstrapGsql",
       suffix: "",
